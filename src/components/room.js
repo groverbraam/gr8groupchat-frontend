@@ -65,6 +65,7 @@ function Room(props) {
 
   // console.log(submissionId)
 
+  // HANDLES THE WORD SUBMISSION
   const handleChange = (e) => {
     if (e.target.value.includes(" ")) {
       e.preventDefault();
@@ -80,6 +81,7 @@ function Room(props) {
     }
   };
 
+  // CLEARS THE CHAT IF THE USER PUTS MORE THAN ONE WORD
   const clearoneWordMessage = () => {
     if (oneWordMessage === true) {
       setTimeout(() => {
@@ -91,13 +93,14 @@ function Room(props) {
     }
   };
 
+  // HANDLES THE SCROLL BEHAVIOR
   const handleScroll = (e) => {
     const position = e.currentTarget.scrollTop;
     const positionMax = e.currentTarget.scrollHeight - 400;
     setCurrentPosition(positionMax);
     setScrollPosition(position);
   };
-
+  // SUBMITS THE MESSAGE TO THE BACKEND
   const onMessageSubmit = (e) => {
     e.preventDefault();
     socketRef.current.emit("send-message", message, props.name);
@@ -105,10 +108,12 @@ function Room(props) {
     setMessage("");
   };
 
+  // SCROLLS TO THE BOTTOMS ONCE A NEW MESSAGE IS ENTERED
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // LISTENS FOR THE NEW MESSAGE FOR THE SCROLL TO BOTTOM BEHAVIOR
   useEffect(() => {
     if (scrollPosition == currentPosition) {
       scrollToBottom();
@@ -116,12 +121,14 @@ function Room(props) {
     return;
   }, [chat]);
 
+  // MAKES SURE THAT THE USER ONLY ENTERS ONE WORD
   const maxLengthCheck = (e) => {
     if (e.target.value.length > e.target.maxLength) {
       e.target.value = e.target.value.slice(0, e.target.maxLength);
     }
   };
 
+  // RENDERS ALL THE MESSAGES TO THE CHAT
   const renderChat = () => {
     const names = props.name;
     return chat.map((message, index) => (
